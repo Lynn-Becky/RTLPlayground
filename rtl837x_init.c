@@ -76,6 +76,16 @@ void static sds_init(void)
 				sds_read(0, 0, 0);
 				pval = SFR_DATA_U16;
 				sds_write_v(0, 0, 0, pval | 0x200);
+#if defined MACHINE_SWTG024AS_V2_0
+				// OEM firmware also sets the companion SDS0 polarity bits.
+				sds_read(0, 0, 0);
+				pval = SFR_DATA_U16;
+				sds_write_v(0, 0, 0, pval | 0x100);
+
+				sds_read(0, 6, 2);
+				pval = SFR_DATA_U16;
+				sds_write_v(0, 6, 2, pval | 0x4000);
+#endif
 			}
 		} else if (machine.n_10g == 1) {
 			reg_read_m(RTL837X_CFG_PHY_MDI_REVERSE);
@@ -193,8 +203,10 @@ void rtl8372_init(void) __banked
 	print_string("\nrtl8372_init called\n");
 
 	sds_init();
+#if !defined MACHINE_SWTG024AS_V2_0
 	if (machine.n_10g != 2)
 		phy_config(8);	// PHY configuration: External 8221B?
+#endif
 	if (machine.n_10g)
 		phy_config_8261(3, 0);
 	if (machine.n_10g == 2)
@@ -212,12 +224,20 @@ void rtl8372_init(void) __banked
 		sfr_mask_data(1, 0, 0x03);
 		sfr_mask_data(0, 0, 0xe2);
 		reg_write_m(RTL837X_REG_SDS_MODES);
+#if defined MACHINE_SWTG024AS_V2_0
+		sds_config(0, SDS_SGMII);
+		sds_config(0, SDS_HISGMII);
+#endif
 	}
 
 	// r0a90:000000f3 R0a90-000000fc
 	reg_read_m(RTL837X_CFG_PHY_MDI_REVERSE);
 	sfr_mask_data(0, 0x0f, 0x0c);
 	reg_write_m(RTL837X_CFG_PHY_MDI_REVERSE);
+#if defined MACHINE_SWTG024AS_V2_0
+	if (machine_detected.isN)
+		REG_SET(RTL837X_CFG_PHY_TX_POLARITY_SWAP, 0x0000596a);
+#endif
 
 	// Disable PHYs for configuration
 	phy_write_mask(0xf0,PHY_MMD31,0xa610,0x2858);

@@ -197,7 +197,7 @@ void phy_config(uint8_t phy) __banked
 
 	//	p081f.d040:ffff P000100.1f00d040:feff
 	// LCR6 (LED Control Register 6, MMD 31.D040), set bits 8/9 to 0b10
-	phy_modify(phy, PHY_MMD30, 0xd040, 0x0300, 0x0200);
+	phy_modify(phy, PHY_MMD31, 0xd040, 0x0300, 0x0200);
 	delay(20);
 
 	//	p081f.a400:ffff P000100.1f00a400:ffff, then: p081f.a400:ffff P000100.1f00a400:bfff

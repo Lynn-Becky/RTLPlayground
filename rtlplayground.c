@@ -953,7 +953,7 @@ void sds_config(uint8_t sds, uint8_t mode)
 		sds_write_v(sds, page, 0x0b, 0x232c); // Q00280b:232c
 		sds_write_v(sds, page, 0x0c, 0x9217); // Q00280c:9217
 		sds_write_v(sds, page, 0x0f, 0x5b50); // Q00280f:5b50
-		sds_write_v(sds, page, 0x15, 0xe7c1); // Q002815:e7f1 BUG !
+		sds_write_v(sds, page, 0x15, page == 0x28 ? 0xe7f1 : 0xe7c1);
 	}
 
 	sds_write_v(sds, page, 0x16, 0x0443); // Q002816:0443 / Q012e16:0443
