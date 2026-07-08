@@ -915,9 +915,9 @@ __code const struct machine machine = {
     .reset_pin = GPIO_NA,
     .high_leds = { .mux =  LED_28_SYS | LED_29, .enable = LED_27 | LED_28_SYS | LED_29 },
     .port_led_set = { 0, 0, 0, 0, 0, 0, 0, 0, 1},
-	/* Ports 1-5 RJ45 use set 0, port 9 SFP uses set 1 
+	/* Ports 1-5 RJ45 use set 0, port 9 SFP uses set 1
 	 * Ports 1-5: Green: 2.5GBit, Amber: 10/100/1000MBit
-	 * SFP-port: Blue: 10GBit, Amber: 100MBit-2.5GBit
+	 * SFP-port: Green: 100MBit/1GBit/2.5GBit, Blue: 10GBit
 	 */
     .led_sets = {
                     {
